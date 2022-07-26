@@ -1,6 +1,7 @@
 from turtle import position
 import pygame
 from utils import *
+
 def Text(msg:str, position:tuple, color:tuple=(255,255,255), size:int=50):
     font = pygame.font.Font('res/Text/Font.ttf', size)
     text = font.render(msg, True, color)
@@ -21,6 +22,7 @@ class Button:
 
         self.sprite = pygame.image.load("res/Text/Button.png")
         self.rect = self.sprite.get_rect()
+        self.pressed = False
 
     def Draw(self):
         sprite = pygame.transform.smoothscale(self.sprite, self.size)
@@ -36,7 +38,11 @@ class Button:
         if self.rect.collidepoint(pygame.mouse.get_pos()):
             if self.size[0] <  self.normalSize[0] + 10 and self.size[1] <  self.normalSize[1] + 10 :
                 self.size[0] += 1
-                self.size[1] += 1
+                self.size[1] += 1   
+
+            if pygame.mouse.get_pressed()[0]:
+                self.pressed = True
+
         else:
             if self.size[0] > self.normalSize[0] and self.size[1] >  self.normalSize[1]:
                 self.size[0] -= 1

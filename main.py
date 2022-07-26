@@ -6,17 +6,19 @@ import sys
 pygame.init()
 
 
-grid = Grid(25)
-snake = Snake(grid)
+def Game():
+    # Game Vars
+    grid = Grid(25)
+    snake = Snake(grid)
 
-def MainMenu():
+    # Main Menu Vars
     PlayButton = Button((270, 250), "Play")
     SettingsButton = Button((270, 350), "Settings")
     QuitButton = Button((270, 450), "Quit")
-
     MovingSnakeUI = MovingSnake()
 
     while True:
+        # Main Menu
         screen.fill(background_colour)
 
         MovingSnakeUI.Update()
@@ -29,6 +31,31 @@ def MainMenu():
         SettingsButton.Update()
         QuitButton.Update()
 
+        if PlayButton.pressed:
+            # Starts Game If Pressed
+            if fx.FadedOut == False:
+                fx.FadeEffect(-1)
+            else:
+                fx.FadeEffect(1)
+            
+            if fx.FadedIn:
+                fx.Reset()
+
+                while True:
+                    clock.tick(90)
+                    pygame.display.set_caption(f"Snake (Score: {snake.score})")
+                    if not snake.isAlive:
+                        return
+
+                    screen.fill(background_colour)
+                    grid.Update()
+                    snake.Update()
+                    pygame.display.flip()
+
+        if QuitButton.pressed:
+            pygame.quit()
+            sys.exit()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -36,23 +63,6 @@ def MainMenu():
         pygame.display.flip()
         
 
-def GameLoop():
-    grid.__init__(25)
-    snake.__init__(grid)
-    pygame.display.set_mode((width, height))
-
-    while True:
-        clock.tick(90)
-        pygame.display.set_caption(f"Snake (Score: {snake.score})")
-        if not snake.isAlive:
-            return
-
-        screen.fill(background_colour)
-        grid.Update()
-        snake.Update()
-        pygame.display.flip()
-
 
 while True:
-    MainMenu()
-    GameLoop()
+    Game()

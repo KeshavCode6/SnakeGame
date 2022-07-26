@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 from utils import *
 from grid import *
 
@@ -38,9 +38,8 @@ class Snake:
     def GetInput(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.isAlive = False
                 pygame.quit()
-
+                sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     self.velocity = (0, -1)
@@ -85,6 +84,7 @@ class Snake:
         
         if self.nextMove >= 1:
             self.CheckForApple()
+            self.CheckForSelfCollision()
 
             i = len(self.tails)-1
 
@@ -94,13 +94,11 @@ class Snake:
  
             self.rect.x += self.velocity[0]*self.grid.cellSize
             self.rect.y += self.velocity[1]*self.grid.cellSize
-
-            if self.rect.x <0 or self.rect.x>width or self.rect.y<0 or self.rect.y>height:
+            
+            self.nextMove = 0
+        
+            if self.rect.x <0 or self.rect.x>=width or self.rect.y<0 or self.rect.y>=height:
                 self.isAlive = False
                 return
-            
-            self.CheckForSelfCollision()
-
-            self.nextMove = 0
 
         

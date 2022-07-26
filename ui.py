@@ -85,3 +85,21 @@ class MovingSnake:
             else:
                 self.position[0] = pygame.mouse.get_pos()[0]
 
+class GamemodeSifter:
+    def __init__(self, images:list, names:list):
+        self.position = position
+
+        for x in range(len(images)):
+            images[x] = pygame.transform.scale(images[x], (400,300))
+
+        self.images = images
+        self.names = names
+
+        self.currentImg = 0
+    
+    def Draw(self):
+        screen.blit(self.images[self.currentImg], (75, 70))
+        Text(self.names[self.currentImg], (275, 270), size=20)
+
+    def Update(self):
+        self.Draw()

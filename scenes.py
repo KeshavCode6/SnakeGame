@@ -25,24 +25,30 @@ def GameModeSelector():
     fx.Reset()
     SelectButton = Button((275, 500), "Select")
     BackButton = Button((525, 25), "<-", (50, 50), textSize=15)
-    Selector = GamemodeSifter([pygame.image.load('res/Snapshots/Classicmode.png')], ["Classic Mode"])
+    Selector = GamemodeSifter()
     MovingSnakeUI = MovingSnake()
 
     while True:
         screen.fill(background_colour)
+        clock.tick(100)
         MovingSnakeUI.Update()
-
         Text("Select a gamemode", (275, 40), size=30)
-        Text("High Score: 0", (275, 400), size=20)
-        Text("Last Score: 0", (275, 430), size=20)
+        Text("High Score: 0", (150, 430), size=20, color=(210,210,210))
+        Text("Last Score: 0", (400, 430), size=20, color=(210,210,210))
 
         SelectButton.Update()
         BackButton.Update()
         Selector.Update()
 
-        if not fx.FadedOut:
+        if not fx.FadedIn:
             fx.FadeEffect(1)
 
+        if BackButton.pressed:
+            if fx.FadedOut == False:
+                fx.FadeEffect(-1)
+            else:
+                return
+ 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -50,6 +56,7 @@ def GameModeSelector():
         pygame.display.flip()    
 
 def MainMenu():
+    fx.Reset()
     PlayButton = Button((275, 150), "Play")
     AboutButton = Button((275, 250), "About")
     SettingsButton = Button((275, 350), "Settings")
@@ -57,6 +64,7 @@ def MainMenu():
     MovingSnakeUI = MovingSnake()
 
     while True:
+        clock.tick(100)
         screen.fill(background_colour)
 
         MovingSnakeUI.Update()
@@ -68,12 +76,16 @@ def MainMenu():
         SettingsButton.Update()
         QuitButton.Update()
 
+        if not fx.FadedIn:
+            fx.FadeEffect(1)
+
         if PlayButton.pressed:
             # Starts Game If Pressed
             if fx.FadedOut == False:
                 fx.FadeEffect(-1)
             else:
-                GameModeSelector()                
+                GameModeSelector() 
+                break               
 
         if QuitButton.pressed:
             pygame.quit()

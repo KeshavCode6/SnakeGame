@@ -16,7 +16,7 @@ class ScreenEffects:
     def Reset(self):
         self.FadedOut = False
         self.FadedIn = False
-
+    
     def FadeEffect(self, direction:int):
         self.image.fill((0,0,0))
         self.image.set_alpha(self.FadeAlpha)

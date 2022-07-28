@@ -1,6 +1,8 @@
 # SnakeGame
 Snake but CURSED. 
 
+* Game is not playable yet *
+
 Notes (if you for some reason want to read them) #CringeAlert:
 - This code is poorly written and not very readable. Copy at your own risk.
 - There are probably a lot of bugs. I plan on fixing some of them.

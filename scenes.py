@@ -23,11 +23,11 @@ def ClassicMode():
 
 def GameModeSelector():
     fx.Reset()
-    SelectButton = Button((275, 500), "Select")
     BackButton = Button((525, 25), "<-", (50, 50), textSize=15)
-    Selector = GamemodeSifter()
+    Selector = GamemodeSifter({"Classic Mode": ClassicMode})
     MovingSnakeUI = MovingSnake()
 
+    fade = False
     while True:
         screen.fill(background_colour)
         clock.tick(100)
@@ -36,7 +36,6 @@ def GameModeSelector():
         Text("High Score: 0", (150, 430), size=20, color=(210,210,210))
         Text("Last Score: 0", (400, 430), size=20, color=(210,210,210))
 
-        SelectButton.Update()
         BackButton.Update()
         Selector.Update()
 
@@ -44,6 +43,9 @@ def GameModeSelector():
             fx.FadeEffect(1)
 
         if BackButton.pressed:
+            fade = True
+        
+        if fade:
             if fx.FadedOut == False:
                 fx.FadeEffect(-1)
             else:
@@ -62,6 +64,7 @@ def MainMenu():
     SettingsButton = Button((275, 350), "Settings")
     QuitButton = Button((275, 450), "Quit")
     MovingSnakeUI = MovingSnake()
+    fade = False
 
     while True:
         clock.tick(100)
@@ -80,7 +83,9 @@ def MainMenu():
             fx.FadeEffect(1)
 
         if PlayButton.pressed:
-            # Starts Game If Pressed
+            fade = True
+
+        if fade:
             if fx.FadedOut == False:
                 fx.FadeEffect(-1)
             else:

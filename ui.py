@@ -42,6 +42,8 @@ class Button:
 
             if pygame.mouse.get_pressed()[0] and fx.FadedIn:
                 self.pressed = True
+            else:
+                self.pressed = False
 
         else:
             if self.size[0] > self.normalSize[0] and self.size[1] >  self.normalSize[1]:
@@ -92,72 +94,86 @@ class SelectorButton(Button):
         self.sprite.set_alpha(200)
 
 class GamemodeSifter:
-    def __init__(self):
+    def __init__(self, gamemodes:dict):
         self.Modes = {
             "Classic Mode":pygame.image.load("res\Icons\ClassicModeIcon.png"),
-            "2 Player mode":pygame.image.load("res\Icons\ClassicModeIcon.png"),
-            "Anime Mode":pygame.image.load("res\Icons\ClassicModeIcon.png")
+            "2 Player mode":pygame.image.load("res\Icons\ComingSoonIcon.png"),
+            "Sussy Mode":pygame.image.load("res\Icons\ComingSoonIcon.png")
         }
+
         self.names = list(self.Modes.keys())
         self.images = list(self.Modes.values())
         self.currentMode = 0
 
         self.leftButton = SelectorButton((30, 225), "<", (40, 80))
         self.rightButton = SelectorButton((520, 225), ">", (40, 80))
+        self.SelectButton = Button((275, 500), "Select")
 
         self.pressWaitTime = 1
+        self.gamemodes = gamemodes
     
     def Draw(self):
-        MainImage = pygame.transform.scale(self.images[self.currentMode], (200,200))
+        MainImage = pygame.transform.scale(self.Modes[self.names[1]], (200,200))
         MainImage.set_alpha(255)
         screen.blit(MainImage, (175, 125))
         
         if len(self.Modes) >= 2:
-            LeftImage = None
-            if self.currentMode-1 < 0:
-                LeftImage = self.images[len(self.Modes)-1]
-            else:
-                LeftImage = self.images[self.currentMode-1]
-            
+            LeftImage = self.Modes[self.names[0]]
             LeftImage.set_alpha(100)
             screen.blit(LeftImage, (60, 175))
 
         if len(self.Modes) >= 3:
-            RightImage = None
-            if self.currentMode+1 > len(self.Modes)-1:
-                RightImage = self.images[len(self.Modes)-1]
-            else:
-                RightImage = self.images[self.currentMode+1]
+            RightImage = self.Modes[self.names[2]]
             
             RightImage.set_alpha(100)
             screen.blit(RightImage, (390, 175))
 
-        Text(f"{self.names[self.currentMode]}", (275, 350), size=30)
+        Text(f"{self.names[1]}", (275, 350), size=30)
         
     def Update(self):
         self.Draw()
         self.leftButton.Update()
         self.rightButton.Update()
+
+        if self.names[1] in list(self.gamemodes.keys()):
+            self.SelectButton.Update()
+
         self.HandleSifting()
     
+    def ScrollRight(self):
+        names = []
+        names.append(self.names[len(self.names)-1])
+
+        x = 0
+        while x < len(self.names)-1:
+            names.append(self.names[x])
+            x+=1
+        
+        self.names = names
+
+    def ScrollLeft(self):
+        names = []
+
+        x = 1
+        while x < len(self.names):
+            names.append(self.names[x])
+            x+=1
+        
+        names.append(self.names[0])
+        self.names = names
+
     def HandleSifting(self):
         if self.pressWaitTime < 0:
             if self.leftButton.pressed:
-                self.currentMode -= 1
-
-                if self.currentMode < 0:
-                    self.currentMode = len(self.Modes)-1
-                
-                self.leftButton.pressed = False
+                self.ScrollLeft()
                 self.pressWaitTime = 1
             
             if self.rightButton.pressed:
-                self.currentMode += 1
-
-                if self.currentMode > len(self.Modes)-1:
-                    self.currentMode = 0
-                
-                self.rightButton.pressed = False
-                self.pressWaitTime = 1
+                self.ScrollRight()
+                self.pressWaitTime = 1            
         else:
-            self.pressWaitTime -= 0.02
+            self.pressWaitTime -= 0.05
+        
+        if self.SelectButton.pressed:
+            self.gamemodes[self.names[1]]()
+        

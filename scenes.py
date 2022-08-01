@@ -8,6 +8,7 @@ pygame.init()
 def ClassicMode():
     grid = Grid(25)
     snake = Snake(grid)
+    fx.Reset()
 
     while True:
         clock.tick(90)
@@ -17,12 +18,32 @@ def ClassicMode():
         pygame.display.set_caption(f"Snake (Score: {snake.score})")
         
         if not snake.isAlive:
+            fx.FadeEffect(-1)
+        
+        if fx.FadedOut:
             return
 
         pygame.display.flip()
 
+def About():
+    pygame.display.set_caption("Snake but CURSED - About")
+
+    while True:
+        screen.fill(background_colour)
+        clock.tick(100)
+
+        Text("About", (275, 10))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        pygame.display.flip()  
+
 def GameModeSelector():
     fx.Reset()
+    pygame.display.set_caption("Snake but CURSED - Gamemode Selector")
+
     BackButton = Button((525, 25), "<-", (50, 50), textSize=15)
     Selector = GamemodeSifter({"Classic Mode": ClassicMode})
     MovingSnakeUI = MovingSnake()
@@ -45,6 +66,9 @@ def GameModeSelector():
         if BackButton.pressed:
             fade = True
         
+        if Selector.selected:
+            return
+        
         if fade:
             if fx.FadedOut == False:
                 fx.FadeEffect(-1)
@@ -55,16 +79,22 @@ def GameModeSelector():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        pygame.display.flip()    
+        pygame.display.flip()  
+
+  
 
 def MainMenu():
     fx.Reset()
+    pygame.display.set_caption("Snake but CURSED - Main Menu")
+
     PlayButton = Button((275, 150), "Play")
     AboutButton = Button((275, 250), "About")
     SettingsButton = Button((275, 350), "Settings")
     QuitButton = Button((275, 450), "Quit")
     MovingSnakeUI = MovingSnake()
     fade = False
+
+    nextScene = None
 
     while True:
         clock.tick(100)
@@ -84,12 +114,13 @@ def MainMenu():
 
         if PlayButton.pressed:
             fade = True
+            nextScene = GameModeSelector
 
         if fade:
             if fx.FadedOut == False:
                 fx.FadeEffect(-1)
             else:
-                GameModeSelector() 
+                nextScene() 
                 break               
 
         if QuitButton.pressed:

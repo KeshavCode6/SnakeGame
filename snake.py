@@ -32,8 +32,10 @@ class Snake:
     
     def Update(self):
         self.Draw()
-        self.GetInput()
-        self.Movement()
+
+        if self.isAlive:
+            self.GetInput()
+            self.Movement()
 
     def GetInput(self):
         for event in pygame.event.get():

@@ -111,7 +111,8 @@ class GamemodeSifter:
 
         self.pressWaitTime = 1
         self.gamemodes = gamemodes
-    
+
+        self.selected = False
     def Draw(self):
         MainImage = pygame.transform.scale(self.Modes[self.names[1]], (200,200))
         MainImage.set_alpha(255)
@@ -176,4 +177,5 @@ class GamemodeSifter:
         
         if self.SelectButton.pressed:
             self.gamemodes[self.names[1]]()
+            self.selected = True
         
